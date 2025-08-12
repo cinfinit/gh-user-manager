@@ -1,0 +1,46 @@
+{
+  "name": "gh-user-manager",
+  "version": "1.0.1",
+  "description": "A CLI tool that lets you juggle multiple GitHub identities like a pro (or wizard)",
+  "main": "bin/index.js",
+  "bin": {
+    "gh-user-manager": "./bin/index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cinfinit/gh-user-manager.git"
+  },
+  "keywords": [
+    "github",
+    "cli",
+    "git",
+    "user",
+    "profile",
+    "account",
+    "switch",
+    "multiple-users",
+    "git-config",
+    "git-profile",
+    "devtools",
+    "productivity",
+    "developer-tool",
+    "keytar",
+    "git-identity",
+    "credential-manager",
+    "token-manager",
+    "github-cli",
+    "automation"
+  ],
+  "author": "cinfinit",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cinfinit/gh-user-manager/issues"
+  },
+  "homepage": "https://github.com/cinfinit/gh-user-manager#readme",
+  "dependencies": {
+    "commander": "^14.0.0"
+  }
+}
