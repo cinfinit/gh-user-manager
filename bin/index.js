@@ -2,12 +2,27 @@
 
 const { program } = require('commander');
 const { addProfile, switchProfile, listProfiles, deleteProfile } = require('../lib/profile');
-
+const { addPreCommitHook } = require('../lib/config');
+const runPreCommitCheck = require('../lib/preCommitCheck');
 // Define CLI commands
 program
   .name('gh-user-manager')
   .description('Switch/add/delete GitHub users on your system')
   .version('0.1.0');
+
+
+program
+  .command('init')
+  .description('Add a pre-commit hook to show current GitHub user and confirm commit')
+  .action(addPreCommitHook);
+
+program
+  .command('run-precommit-check')
+  .description('Run pre-commit identity check (used by Git hook)')
+  .action(async () => {
+    const runCheck = require('../lib/preCommitCheck');
+    await runCheck();
+  });
 
 program
   .command('add')
