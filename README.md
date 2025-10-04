@@ -18,6 +18,13 @@ npm install -g gh-user-manager
 
 ✨ Boom! You now have `gh-user-manager` available globally.
 
+Now if you want the pre-commit hook to show the current identity and confirm the commit, run:
+
+```bash
+gh-user-manager init
+```
+
+This will add a pre-commit hook to your repository that will show the current identity and confirm before commit.
 ---
 
 ## 🧰 Features
