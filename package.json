@@ -1,6 +1,6 @@
 {
   "name": "gh-user-manager",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A CLI tool that lets you juggle multiple GitHub identities like a pro (or wizard)",
   "main": "bin/index.js",
   "bin": {
