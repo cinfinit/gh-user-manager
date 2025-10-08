@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 
 const { program } = require('commander');
-const { addProfile, switchProfile, listProfiles, deleteProfile } = require('../lib/profile');
+const { addProfile, switchProfile, listProfiles, deleteProfile , updateProfile } = require('../lib/profile');
 const { addPreCommitHook } = require('../lib/config');
-const runPreCommitCheck = require('../lib/preCommitCheck');
+const { addPlatform, deletePlatform, updatePlatform , listPlatforms, resetPlatforms, restorePlatforms } = require('../lib/platformManager');
 // Define CLI commands
 program
   .name('gh-user-manager')
   .description('Switch/add/delete GitHub users on your system')
-  .version('0.1.0');
+  .version('0.2.0');
 
 
 program
@@ -30,6 +30,7 @@ program
   .requiredOption('--name <name>', 'Profile name')
   .requiredOption('--email <email>', 'Git email')
   .requiredOption('--username <username>', 'GitHub username')
+  .option('--platform <platform>', 'Platform (github, gitlab, bitbucket)', 'github')
   .option('--auth <auth>', 'Auth method (https or ssh)', 'https')
   .option('--token <token>', 'Personal Access Token (if using https)')
   .action(addProfile);
@@ -50,5 +51,55 @@ program
   .description('Delete a GitHub user profile')
   .argument('<name>', 'Profile name')
   .action(deleteProfile);
+
+
+program
+  .command('update-profile')
+  .description('Update an existing user profile')
+  .argument('<name>', 'Profile name')
+  .option('--email <email>', 'New Git email')
+  .option('--username <username>', 'New Git username')
+  .option('--platform <platform>', 'New platform')
+  .option('--auth <auth>', 'Auth method (https or ssh)')
+  .option('--token <token>', 'New personal access token')
+  .action((name, options) => updateProfile(name, options));
+
+
+program
+  .command('add-platform')
+  .description('Register a new Git hosting platform')
+  .requiredOption('--name <name>', 'Platform name (e.g., gitea)')
+  .requiredOption('--domain <domain>', 'Git domain (e.g., gitea.company.com)')
+  .option('--auth-format <format>', 'Credential format (default: https://{username}:{token}@{domain})')
+  .action(addPlatform);
+
+program
+  .command('delete-platform')
+  .description('Delete a registered platform')
+  .requiredOption('--name <name>', 'Platform name')
+  .action(deletePlatform);
+
+program
+  .command('update-platform')
+  .description('Update domain or auth format of a platform')
+  .requiredOption('--name <name>', 'Platform name')
+  .option('--domain <domain>', 'New domain')
+  .option('--auth-format <format>', 'New auth format')
+  .action(updatePlatform);
+
+program
+  .command('list-platforms')
+  .description('List all registered Git platforms')
+  .action(listPlatforms);
+
+program
+  .command('reset-platforms')
+  .description('Reset platform list to default (GitHub, GitLab, Bitbucket)')
+  .action(resetPlatforms);
+
+program
+  .command('restore-platforms')
+  .description('Restore platforms list from last backup')
+  .action(restorePlatforms);
 
 program.parse();

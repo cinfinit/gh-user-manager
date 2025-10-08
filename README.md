@@ -60,6 +60,7 @@ gh-user-manager add \
   --name work \
   --email dev@company.com \
   --username work-dev \
+  --platform github \
   --auth https \
   --token ghp_xxxxxx
 ```
@@ -101,6 +102,126 @@ See all your saved profiles and the currently active one.
 
 ---
 
+## 🌐 Git Platforms in gh-user-manager
+
+A platform defines the Git hosting service (like GitHub, GitLab, Bitbucket, etc.) and how authentication is handled — especially for HTTPS-based personal access tokens (PATs).
+
+Each platform has:
+
+A domain (e.g., github.com)
+
+An authFormat (e.g., https://{username}:{token}@{domain}) used to construct the credential string saved to .git-credentials
+
+Your profiles use these platforms when switching Git identities on your system.
+
+
+## 🧰 Platform Management Commands
+
+### ➕ Add a New Platform
+
+```bash
+gh-user-manager add-platform \
+  --name myhost \
+  --domain git.mycompany.com \
+  --auth-format "https://{username}:{token}@{domain}"
+```
+
+Option	Description	Required	Default
+--name	Name/key of the platform (e.g., github, gitea)	✅ Yes	—
+--domain	Git domain used by this platform	✅ Yes	—
+--auth-format	Credential format (with {username}, {token}, {domain})	No	https://{username}:{token}@{domain}
+
+ℹ️ If --auth-format is not provided, a sensible default will be used.
+
+### 📋 List All Platforms
+
+```bash
+gh-user-manager list-platforms
+```
+
+Displays all registered Git platforms along with their domains and auth formats.
+
+### 🖊️ Update an Existing Platform
+
+```bash
+gh-user-manager update-platform \
+  --name gitlab \
+  --domain gitlab.company.com \
+  --auth-format "https://{username}:{token}@{domain}"
+```
+
+Option	Description	Required
+--name	Platform name to update	✅ Yes
+--domain	New domain (optional)	No
+--auth-format	New auth format string (optional)	No
+
+You can update just the domain, just the auth format, or both.
+
+### 🗑️ Delete a Platform
+
+```bash
+gh-user-manager delete-platform \
+  --name myhost
+```
+
+Removes a custom platform by name. Built-in platforms (like github) can also be deleted, though it's not recommended unless you plan to override them.
+
+### 🔄 Reset Platforms to Defaults
+
+```bash
+gh-user-manager reset-platforms
+```
+
+Restores the default platforms:
+
+github.com
+
+gitlab.com
+
+bitbucket.org
+
+A backup of the current platform file will be saved as:
+
+~/.gh-user-manager-platforms.json.bak
+
+### ♻️ Restore Platforms from Backup
+
+```bash
+gh-user-manager restore-platforms
+```
+
+Restores the platform config from the last .bak backup (if available).
+
+### 🧠 Additional Notes
+
+You can define custom Git providers (e.g., Gitea, Azure DevOps) using add-platform
+
+Every profile is linked to a platform using the --platform flag (defaults to github if omitted)
+
+HTTPS authentication only works if authFormat is valid and includes {username}, {token}, and {domain} placeholders
+
+### 💡 Example: Adding & Using a Custom Platform
+
+```bash
+gh-user-manager add-platform \
+  --name gitea \
+  --domain gitea.dev.local \
+  --auth-format "https://{username}:{token}@{domain}"
+```
+
+```bash
+gh-user-manager add \
+  --name dev \
+  --email dev@gitea.dev.local \
+  --username dev-user \
+  --platform gitea \
+  --auth https \
+  --token your_token_here
+```
+
+Now, switching to dev will use your custom Gitea host and its credentials.
+
+
 ## 📦 What This Tool Doesn’t Do (Yet)
 
 * Wash your dishes
@@ -130,3 +251,9 @@ When not switching identities like a GitHub secret agent, they’re probably:
 
 ---
 
+## Change Log
+
+### v0.2.0
+
+- Added the concept of platforms and it's management commands
+- Added pre-commit hook to show current identity and confirm commit
